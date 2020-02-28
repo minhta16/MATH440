@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Copy element &apos;TestRealPolynomial.java&apos; to &apos;numericalMethodsTests.TestRealPolynomial.java&apos;&#x0D;&#x0A;- Original project: &apos;Day02(Polynomial)&apos;&#x0D;&#x0A;- Destination element: &apos;numericalMethodsTests.TestRealPolynomial.java&apos;&#x0D;&#x0A;- Original element: &apos;numericalMethodsTests.TestRealPolynomial.java&apos;" description="Copy compilation unit" destination="/src&lt;numericalMethodsTests{TestRealPolynomial.java" element1="/src&lt;numericalMethodsTests{TestRealPolynomial.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1581968743607" units="1" version="1.0"/>
-</session>

@@ -4,6 +4,8 @@ public class InfiniteStuffs {
 		// exercise2();
 		// exercise3b();
 		lab08();
+//		lab09();
+//		System.out.println(evaluateSumLab09(0.5, 9));
 	}
 
 	public static void exercise1() {
@@ -41,10 +43,10 @@ public class InfiniteStuffs {
 	}
 
 	public static void lab08() {
-		double target = 2.54;
+		double target = 2.47;
 		int terms = 6400;
-		double a = 1.51;
-		double b = 1.51914;
+		double a = 1.53878906;
+		double b = 1.539375;
 		int steps = 5;
 
 		double[] interval = estimateSumBisection(target, terms, a, b, steps);
@@ -64,12 +66,11 @@ public class InfiniteStuffs {
 
 	public static void lab09() {
 		double target = 2.47;
-		int terms = 6400;
-		double a = 0;
+		double a = 0.3;
 		double b = 0.5;
 		int steps = 5;
 
-		for (int i = 200; i <= 64000; i *= 2) {
+		for (int i = 2; i <= 70; i *= 2) {
 			double[] result = estimateSumSecantLab09(target, i, a, b, steps);
 			System.out.println("Terms = " + i + " f(x) = " + evaluateSumLab09(result[1], i));
 		}
@@ -94,12 +95,13 @@ public class InfiniteStuffs {
 			y1 = evaluateSum(x1, terms) - target;
 			double xNew = x1 - y1 * (x1 - x0) / (y1 - y0);
 			double fNew = evaluateSum(xNew, terms) - target;
-			System.out.printf("f(%.08f)=%.08f, f(%.08f)=%.08f, f(%.08f)=%.08f\n", x0, y0, x1, y1, xNew, fNew);
+			System.out.printf("f(%.08f)=%.08f, f(%.08f)=%.08f", x0, y0, x1, y1);
 			x0 = x1;
 			y0 = y1;
 			x1 = xNew;
 			y1 = fNew;
 		}
+		System.out.println("Result: f(" + x1 + ") = " + y1);
 		return new double[] { x0, x1 };
 	}
 
@@ -122,12 +124,13 @@ public class InfiniteStuffs {
 			y1 = evaluateSumLab09(x1, terms) - target;
 			double xNew = x1 - y1 * (x1 - x0) / (y1 - y0);
 			double fNew = evaluateSumLab09(xNew, terms) - target;
-			System.out.printf("f(%.08f)=%.08f, f(%.08f)=%.08f, f(%.08f)=%.08f\n", x0, y0, x1, y1, xNew, fNew);
+			System.out.printf("f(%.08f)=%.08f, f(%.08f)=%.08f\n", x0, y0, x1, y1);
 			x0 = x1;
 			y0 = y1;
 			x1 = xNew;
 			y1 = fNew;
 		}
+		System.out.println("Result: f(" + x1 + ") = " + y1);
 		return new double[] { x0, x1 };
 	}
 
@@ -194,7 +197,7 @@ public class InfiniteStuffs {
 	public static double evaluateSumLab09(double s, int terms) {
 		double sum = 1;
 		for (int i = 1; i <= terms; i++) {
-			sum += i *  (Math.exp(Math.log(s) * i));
+			sum += i * (Math.exp(Math.log(s) * i));
 		}
 		return sum;
 	}

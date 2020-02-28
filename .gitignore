@@ -17,6 +17,8 @@ bin/
 tmp/
 .metadata
 .classpath
+*.classpath
+*.project
 .project
 *.tmp
 *.bak

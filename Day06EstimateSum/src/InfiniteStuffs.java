@@ -196,7 +196,7 @@ public class InfiniteStuffs {
 	 */
 	public static double evaluateSumLab09(double s, int terms) {
 		double sum = 1;
-		for (int i = 1; i <= terms; i++) {
+		for (int i = terms; i >= 1; i--) {
 			sum += i * (Math.exp(Math.log(s) * i));
 		}
 		return sum;

@@ -1,3 +1,11 @@
+/**
+ * This class estimate the value for series, which includes the sum of of
+ * 1/(n^s) where n goes to infinity, the product of 1 + 1/(n^s) where n goes to
+ * infinity, and the sum of i*n^i where i goes to infinity.
+ * 
+ * @author: Minh Ta
+ */
+
 public class InfiniteStuffs {
 	public static void main(String[] args) {
 		// exercise1();
@@ -134,7 +142,6 @@ public class InfiniteStuffs {
 		return new double[] { x0, x1 };
 	}
 
-
 	/**
 	 * Estimate x where f(x) = target using the bisection method
 	 * 
@@ -190,7 +197,7 @@ public class InfiniteStuffs {
 	 * Evaluate sum of the series n*(s^n), where n ranges from 1 to 'terms', and s
 	 * is 'power'
 	 * 
-	 * @param s the value of s
+	 * @param s     the value of s
 	 * @param terms the value of n
 	 * @return an approximation of the sum of the series 1/(n^s)
 	 */

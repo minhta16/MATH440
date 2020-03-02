@@ -1,3 +1,5 @@
+import numericalmethods.RealPolynomial;
+
 /**
  * This class estimate the value for series, which includes the sum of of
  * 1/(n^s) where n goes to infinity, the product of 1 + 1/(n^s) where n goes to
@@ -7,13 +9,23 @@
  */
 
 public class InfiniteStuffs {
+
+	public enum FunctionType {
+		F1,	// f1(x) = e^x - 3
+		F2,	// f2(x) = -3(x-0.8)^2 + 1
+		F,	// f(x) = x^3+x^2-20x+1
+		G,	// g(x) = 1 + x + x^3/3 + x^5/5 + ...
+		H,	// h(x) = x^3 - x^2 - 3x + 1
+	}
+	
 	public static void main(String[] args) {
 		// exercise1();
 		// exercise2();
 		// exercise3b();
-		lab08();
+//		lab08();
 //		lab09();
 //		System.out.println(evaluateSumLab09(0.5, 9));
+		lab11();
 	}
 
 	public static void exercise1() {
@@ -81,6 +93,19 @@ public class InfiniteStuffs {
 		for (int i = 2; i <= 70; i *= 2) {
 			double[] result = estimateSumSecantLab09(target, i, a, b, steps);
 			System.out.println("Terms = " + i + " f(x) = " + evaluateSumLab09(result[1], i));
+		}
+	}
+
+	public static void lab11() {
+		double target = 0;
+		double a = 1.0986;
+		double b = 1.1;
+		int steps = 5;
+		FunctionType type = FunctionType.F1;
+
+		for (int i = 200; i <= 6400; i *= 2) {
+			double[] result = estimateSumHybrid(target, i, a, b, steps, type);
+			System.out.println("Terms = " + i + " f(x) = " + evaluateFunction(result[1], i, type));
 		}
 	}
 
@@ -173,6 +198,45 @@ public class InfiniteStuffs {
 	}
 
 	/**
+	 * Estimate x where f(x) = target using the hybrid of bisection and secant
+	 * methods
+	 * 
+	 * @param target the target
+	 * @param terms  number of terms to estimate the sum of the series
+	 * @param leftX  the left end of the search interval
+	 * @param rightX the right end of the search interval
+	 * @param steps  number of search steps
+	 * @return an estimation of x
+	 */
+	public static double[] estimateSumHybrid(double target, int terms, double leftX, double rightX, int steps, FunctionType type) {
+		double x0 = leftX;
+		double x1 = rightX;
+		double y0 = 0, y1 = 0;
+		for (int i = 0; i < steps; i++) {
+			y0 = evaluateFunction(x0, terms, type) - target;
+			y1 = evaluateFunction(x1, terms, type) - target;
+			double xNew = x1 - y1 * (x1 - x0) / (y1 - y0);
+			double yNew = evaluateFunction(xNew, terms, type) - target;
+			// xNew out of bound, use bisection
+			if (xNew < x0 || x1 < xNew) {
+				xNew = (x0 + x1) / 2;
+				yNew = evaluateFunction(xNew, terms, type) - target;
+				System.out.print("Bis: ");
+			} else {
+				System.out.print("Sec: ");
+			}
+			if (yNew * y0 < 0) {
+				x1 = xNew;
+			} else {
+				x0 = xNew;
+			}
+			System.out.printf("f(%.08f)=%.08f, f(%.08f)=%.08f\n", x0, y0, x1, y1);
+		}
+		System.out.println("Result: f(" + x1 + ") = " + y1);
+		return new double[] { x0, x1 };
+	}
+
+	/**
 	 * Evaluate sum of the series 1/(n^s), where n ranges from 1 to 'terms', and s
 	 * is 'power'
 	 * 
@@ -191,6 +255,44 @@ public class InfiniteStuffs {
 		 */
 		double error = 1 / ((power - 1) * (Math.exp(Math.log(terms) * (power - 1))));
 		return sum + error;
+	}
+	
+	/**
+	 * Evaluate various function of Day 11 lab
+	 * 
+	 * @param x the value of x
+	 * @param terms the value of n
+	 * @param type type of function, see Day 11 Lab
+	 * @return an approximation of the function given x
+	 */
+	public static double evaluateFunction(double x, int terms, FunctionType type) {
+		switch (type) {
+		case F1:{
+			return Math.exp(x) - 3;
+		}
+		case F2: {
+			return -3*(x - 0.8) * (x - 0.8) + 1;
+		}
+		case F: {
+			RealPolynomial rp = new RealPolynomial(new double[] {1, -20, 1, 1});
+			return rp.evaluateAt(x);
+		}
+		case G: {
+			double sum = 1;
+			for (int i = terms; i >= 1; i--) {
+				sum += (Math.exp(Math.log(i) * x)) / i;
+			}
+			return sum;
+		}
+		case H: {
+			RealPolynomial rp = new RealPolynomial(new double[] {1, -3, -1, 1});
+			return rp.evaluateAt(x);
+		}
+		default: {
+			return 0;
+		}
+			
+		}
 	}
 
 	/**

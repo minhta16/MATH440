@@ -98,15 +98,20 @@ public class InfiniteStuffs {
 
 	public static void lab11() {
 		double target = 0;
-		double a = 1.0986;
-		double b = 1.1;
+		double a = -1.5;
+		double b = -1;
 		int steps = 5;
-		FunctionType type = FunctionType.F1;
-
-		for (int i = 200; i <= 6400; i *= 2) {
-			double[] result = estimateSumHybrid(target, i, a, b, steps, type);
-			System.out.println("Terms = " + i + " f(x) = " + evaluateFunction(result[1], i, type));
-		}
+		FunctionType type = FunctionType.G;
+		
+		System.out.println(evaluateFunction(-2, 100, FunctionType.G));
+		
+		double[] result = estimateSumHybrid(target, 6400, a, b, steps, type);
+		System.out.println("f(x) = " + evaluateFunction(result[1], 1, type));
+		
+//		for (int i = 200; i <= 6400; i *= 2) {
+//			double[] result = estimateSumHybrid(target, i, a, b, steps, type);
+//			System.out.println("Terms = " + i + " f(x) = " + evaluateFunction(result[1], i, type));
+//		}
 	}
 
 	/**
@@ -230,7 +235,7 @@ public class InfiniteStuffs {
 			} else {
 				x0 = xNew;
 			}
-			System.out.printf("f(%.08f)=%.08f, f(%.08f)=%.08f\n", x0, y0, x1, y1);
+			System.out.printf("f(%.15f)=%.15f, f(%.15f)=%.15f\n", x0, y0, x1, y1);
 		}
 		System.out.println("Result: f(" + x1 + ") = " + y1);
 		return new double[] { x0, x1 };
@@ -280,7 +285,7 @@ public class InfiniteStuffs {
 		case G: {
 			double sum = 1;
 			for (int i = terms; i >= 1; i--) {
-				sum += (Math.exp(Math.log(i) * x)) / i;
+				sum += Math.pow(x, i) / i;
 			}
 			return sum;
 		}

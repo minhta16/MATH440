@@ -1,5 +1,7 @@
 package tiffy;
 
+import numericalmethods.RealPolynomial;
+
 /***
  * This class helps approximate the value of x where f(x) = 2.46. The class has
  * the estimation of 2 functions of x. f1(x) is the the sum of 1/(n^x) where n
@@ -13,23 +15,27 @@ package tiffy;
 public class SumOfTerm {
 	public static void main(String[] args) {
 		// Test Sum
-		for (int i = 1000; i <= 4000; i *= 2) {
-			System.out.println(i + " " + evaluateSum(i, 1.676));
-		}
+//		for (int i = 1000; i <= 4000; i *= 2) {
+//			System.out.println(i + " " + evaluateSum(i, 1.676));
+//		}
 		// Test Product
-		for (int i = 1000; i <= 4000; i *= 2) {
-			System.out.println(i + " " + evaluateProduct(1, i, 3.7951));
-		}
+//		for (int i = 1000; i <= 4000; i *= 2) {
+//			System.out.println(i + " " + evaluateProduct(1, i, 3.7951));
+//		}
 
 		// Test Bisection Sum
-		bisectionSum(2.46, 1.541, 1.54207, 5, 6400);
-		secantSum(2.46, 1.53906, 1.54224, 5, 6400);
-
-		for (int i = 800; i <= 6400; i *= 2) {
-			System.out.println("at term" + i + " : f(1.542003125) = " + evaluateSumImproved(i, 1.542003125));
+//		bisectionSum(2.46, 1.53906, 1.54224, 5, 6400);
+		for (int i = 4; i <= 64; i *= 2) {
+			System.out.println("i=" + i);
+			secantSum(2.46, 0.4, 0.5, 5, i);
 		}
 
-		// Test Secant Estimation
+//		for (int i = 800; i <= 6400; i *= 2) {
+//			System.out.println("at term" + i + " : f(1.54204) = " + evaluateSumImproved(i, 1.54204));
+//		}
+
+		// Test Hybrid Estimation
+		hybridFunc(-6 ,-5, 5, 6400);
 		System.out.println();
 
 	}
@@ -50,9 +56,9 @@ public class SumOfTerm {
 	}
 
 	// This method helps evaluate the sum of 1 + n*(s^n), which is f(x) of Lab 09
-	public static double evaluateSumL9(double power, int numOfTerms) {
+	public static double evaluateSumL9(int numOfTerms, double power) {
 		double sum = 1;
-		for (int i = 1; i <= numOfTerms; i++) {
+		for (int i = numOfTerms; i >= 1; i--) {
 			sum += i * Math.exp(Math.log(power) * i);
 		}
 		return sum;
@@ -65,6 +71,29 @@ public class SumOfTerm {
 			result *= (1 + (1 / (Math.exp((root) * Math.log(i)))));
 		}
 		return result;
+	}
+	
+	// Evaluate f(x) = x^3 + x^2 - 20x + 1
+	public static double evaluateSum1(double x) {
+		double[] coeff = {1, -20, 1, 1};
+		RealPolynomial rp = new RealPolynomial(coeff);
+		return rp.evaluateAt(x);
+	}
+	
+	// Evaluate g(x) = 1 + x + (x^3)/3 + (x^5)/5 +...
+	public static double evaluateSum2(double x, int numOfTerms) {
+		double result = 1;
+		for (int i = numOfTerms * 2 - 1; i >= 1; i-=2) {
+			result += Math.pow(x, i) / i;
+		}
+		return result;
+	}
+	
+	// Evaluate h(x) = x^3 - x^2 -3x + 1 
+	public static double evaluateSum3(double x) {
+		double[] coeff = {1, -3, -1, 1};
+		RealPolynomial rp = new RealPolynomial(coeff);
+		return rp.evaluateAt(x);
 	}
 
 	// This method helps evaluate the sum of 1/(n^s) using the bisection method,
@@ -86,14 +115,14 @@ public class SumOfTerm {
 		System.out.println("error=" + (fLeft - fRight));
 	}
 
-	// This method helps evaluate the sum of 1/(n^s) using the secant method, given
+	// This method helps evaluate the sum of n*(s^n) using the secant method, given
 	// the interval between
 	public static void secantSum(double target, double x1, double x2, int steps, int numOfTerms) {
-		double y1 = evaluateSumImproved(numOfTerms, x1) - target;
-		double y2 = evaluateSumImproved(numOfTerms, x2) - target;
+		double y1 = evaluateSumL9(numOfTerms, x1) - target;
+		double y2 = evaluateSumL9(numOfTerms, x2) - target;
 		for (int i = 0; i < steps; i++) {
 			double x3 = x2 - y2 * (x2 - x1) / (y2 - y1);
-			double y3 = evaluateSumImproved(numOfTerms, x3) - target;
+			double y3 = evaluateSumL9(numOfTerms, x3) - target;
 			x1 = x2;
 			y1 = y2;
 			x2 = x3;
@@ -101,4 +130,33 @@ public class SumOfTerm {
 			System.out.println("x1 = " + x1 + " y1 = " + y1 + " x2 = " + x2 + " y2 = " + y2);
 		}
 	}
+
+	// The hybrid algorithm that uses the secant method wherever possible and use
+	// bisection when secant doesn't work
+	public static void hybridFunc(double x1, double x2, int steps, int numOfTerms) {
+		double y1 = evaluateSum1(x1);
+		double y2 = evaluateSum1(x2);
+		for (int i = 0; i < steps; i++) {
+			double c = x2 - y2 * (x2 - x1) / (y2 - y1);
+			double fc = evaluateSum1(c);
+			if ((c < x1) || (c > x2)) {
+				c = (x1 + x2) / 2;
+				if (fc * y1 < 0) {
+					x2 = c;
+				} else {
+					x1 = c;
+				}
+				System.out.print("Used bisection ");
+			} else {
+				if (x1 * fc < 0) {
+					x2 = c;
+				} else {
+					x1 = c;
+				}
+				System.out.print("Used secant ");
+			}
+			System.out.println("f(" + c + ") = " + fc);
+		}
+	}
+
 }

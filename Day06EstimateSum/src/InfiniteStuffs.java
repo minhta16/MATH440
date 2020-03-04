@@ -98,20 +98,18 @@ public class InfiniteStuffs {
 
 	public static void lab11() {
 		double target = 0;
-		double a = -1.5;
-		double b = -1;
+		double a = 2.16;
+		double b = 2.170086486626035;
 		int steps = 5;
-		FunctionType type = FunctionType.G;
+		FunctionType type = FunctionType.H;
 		
-		System.out.println(evaluateFunction(-2, 100, FunctionType.G));
 		
-		double[] result = estimateSumHybrid(target, 6400, a, b, steps, type);
-		System.out.println("f(x) = " + evaluateFunction(result[1], 1, type));
+		double[] result = estimateSumHybrid(target, 1, a, b, steps, type);
 		
-//		for (int i = 200; i <= 6400; i *= 2) {
-//			double[] result = estimateSumHybrid(target, i, a, b, steps, type);
-//			System.out.println("Terms = " + i + " f(x) = " + evaluateFunction(result[1], i, type));
-//		}
+		
+		double tryThis = -2;
+		System.out.println("f(" + tryThis + ") = " + evaluateFunction(tryThis, 1, type));
+		
 	}
 
 	/**
@@ -285,7 +283,8 @@ public class InfiniteStuffs {
 		case G: {
 			double sum = 1;
 			for (int i = terms; i >= 1; i--) {
-				sum += Math.pow(x, i) / i;
+				long power = (i * 2) - 1;
+				sum += Math.pow(x, power) / power;
 			}
 			return sum;
 		}

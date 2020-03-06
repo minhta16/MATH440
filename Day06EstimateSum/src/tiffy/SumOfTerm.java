@@ -25,17 +25,19 @@ public class SumOfTerm {
 
 		// Test Bisection Sum
 //		bisectionSum(2.46, 1.53906, 1.54224, 5, 6400);
-		for (int i = 4; i <= 64; i *= 2) {
-			System.out.println("i=" + i);
-			secantSum(2.46, 0.4, 0.5, 5, i);
-		}
+//		for (int i = 4; i <= 64; i *= 2) {
+//			System.out.println("i=" + i);
+//			secantSum(2.46, 0.4, 0.5, 5, i);
+//		}
 
 //		for (int i = 800; i <= 6400; i *= 2) {
 //			System.out.println("at term" + i + " : f(1.54204) = " + evaluateSumImproved(i, 1.54204));
 //		}
 
 		// Test Hybrid Estimation
-		hybridFunc(-6 ,-5, 5, 6400);
+		System.out.println(evaluateSum3(2.1700864866260338));
+		System.out.println(evaluateSum3(2.1700864866260339));
+		hybridFunc(2.17, 2.171, 5, 6400);
 		System.out.println();
 
 	}
@@ -134,12 +136,12 @@ public class SumOfTerm {
 	// The hybrid algorithm that uses the secant method wherever possible and use
 	// bisection when secant doesn't work
 	public static void hybridFunc(double x1, double x2, int steps, int numOfTerms) {
-		double y1 = evaluateSum1(x1);
-		double y2 = evaluateSum1(x2);
 		for (int i = 0; i < steps; i++) {
+			double y1 = evaluateSum3(x1);
+			double y2 = evaluateSum3(x2);
 			double c = x2 - y2 * (x2 - x1) / (y2 - y1);
-			double fc = evaluateSum1(c);
-			if ((c < x1) || (c > x2)) {
+			double fc = evaluateSum3(c);
+			if ((c < x1) || (x2 < c)) {
 				c = (x1 + x2) / 2;
 				if (fc * y1 < 0) {
 					x2 = c;
@@ -148,14 +150,15 @@ public class SumOfTerm {
 				}
 				System.out.print("Used bisection ");
 			} else {
-				if (x1 * fc < 0) {
+				if (y1 * fc < 0) {
 					x2 = c;
 				} else {
 					x1 = c;
 				}
 				System.out.print("Used secant ");
 			}
-			System.out.println("f(" + c + ") = " + fc);
+			System.out.print("f(" + x1 + ") = " + y1 + " ");
+			System.out.println("f(" + x2 + ") = " + y2);
 		}
 	}
 

@@ -28,10 +28,23 @@ public class MyApprox {
 //		System.out.printf("Max diff=%.10f, at x=%.10f, a1=%.10f, a2=%.10f", result[0], result[1], a1, a2);
 		
 //		Interpolating points approximation
-		double[] x = {0.0166, 0.1402, 0.34259, 0.5476, 0.6758};
-		double[] y = {exp(-x[0]), exp(-x[1]), exp(-x[2]), exp(-x[3]), exp(-x[4])};
-		double[] result = testApprox(x, y, -1, 0, log(2), 100);
-		System.out.printf("Max diff=%.10f, at x=%.10f", result[0], result[1]);
+//		double[] x = {0.0166, 0.1402, 0.34259, 0.5476, 0.6758};
+//		double[] y = {exp(-x[0]), exp(-x[1]), exp(-x[2]), exp(-x[3]), exp(-x[4])};
+//		double[] result = testApprox(x, y, -1, 0, log(2), 100);
+//		System.out.printf("Max diff=%.10f, at x=%.10f", result[0], result[1]);
+		
+		// Lab11 ex2
+//		double[] x = {10, 13, 16, 19, 22};
+//		double[] y = {7.616, 8.617, 9.217, 9.562, 9.757};
+//		RealPolynomial rp = new RealPolynomial(x, y);
+//		System.out.println(rp.createString());
+//		
+		// Lab11 ex3
+		double[] x = {125, 150, 200};
+		double[] y = {5.9, 10.3, 13.8};
+		RealPolynomial rp = new RealPolynomial(x, y);
+		System.out.println(rp.createString());
+		System.out.println(rp.evaluateAt(200));
 		
 	}
 

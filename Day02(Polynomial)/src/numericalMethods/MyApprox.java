@@ -40,8 +40,8 @@ public class MyApprox {
 //		System.out.println(rp.createString());
 //		
 		// Lab11 ex3
-		double[] x = {125, 150, 200};
-		double[] y = {5.9, 10.3, 13.8};
+		double[] x = {10, 13, 16, 19, 22};
+		double[] y = {7.616, 8.617, 9.217, 9.562, 9.757};
 		RealPolynomial rp = new RealPolynomial(x, y);
 		System.out.println(rp.createString());
 		System.out.println(rp.evaluateAt(200));

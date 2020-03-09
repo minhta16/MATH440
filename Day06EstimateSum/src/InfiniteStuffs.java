@@ -16,6 +16,8 @@ public class InfiniteStuffs {
 		F,	// f(x) = x^3+x^2-20x+1
 		G,	// g(x) = 1 + x + x^3/3 + x^5/5 + ...
 		H,	// h(x) = x^3 - x^2 - 3x + 1
+		MID_TERM, // f(x) = e^x - 2p - x
+		J_MID_TERM, // J(x) = 1 - x^2/2^2 + x^4/(2^2*4^2) ...
 	}
 	
 	public static void main(String[] args) {
@@ -25,7 +27,8 @@ public class InfiniteStuffs {
 //		lab08();
 //		lab09();
 //		System.out.println(evaluateSumLab09(0.5, 9));
-		lab11();
+//		lab11();
+		midTerm();
 	}
 
 	public static void exercise1() {
@@ -109,6 +112,23 @@ public class InfiniteStuffs {
 		
 		double tryThis = -2;
 		System.out.println("f(" + tryThis + ") = " + evaluateFunction(tryThis, 1, type));
+		
+	}
+	
+	public static void midTerm() {
+		double target = 0;
+		double a = 5.210720153205093;
+		double b = 5.520078110286386;
+		int steps = 5;
+		FunctionType type = FunctionType.J_MID_TERM ;
+		
+		for (int i = 5; i <= 300; i += 1) {
+			System.out.print("i = " + i + " ");
+			System.out.print(evaluateFunction(5.5200781102863, i, type));
+			System.out.print(" ");
+			System.out.println(evaluateFunction(5.5200781102864, i, type));
+		}
+		double[] result = estimateSumHybrid(target, 40, a, b, steps, type);
 		
 	}
 
@@ -233,7 +253,7 @@ public class InfiniteStuffs {
 			} else {
 				x0 = xNew;
 			}
-			System.out.printf("f(%.15f)=%.15f, f(%.15f)=%.15f\n", x0, y0, x1, y1);
+			System.out.printf("f(" + x0 + ")=" + y0 + " f(" + x1 + ")=" + y1 + "\n");
 		}
 		System.out.println("Result: f(" + x1 + ") = " + y1);
 		return new double[] { x0, x1 };
@@ -291,6 +311,24 @@ public class InfiniteStuffs {
 		case H: {
 			RealPolynomial rp = new RealPolynomial(new double[] {1, -3, -1, 1});
 			return rp.evaluateAt(x);
+		}
+		case MID_TERM: {
+			return Math.exp(x) - 2 * 0.76 - x;
+		}
+		case J_MID_TERM: {
+			double sum = 1;
+			double term = 1;
+			if (x == 0) {
+				return 1;
+			}
+			for (int i = 1; i <= terms; i++) {
+				term *= - x * x / (i * 2) /  (i * 2);
+			}
+			for (int i = terms; i >= 1; i--) {
+				sum += term;
+				term /= - x * x / (i * 2) / (i * 2);
+			}
+			return sum;
 		}
 		default: {
 			return 0;

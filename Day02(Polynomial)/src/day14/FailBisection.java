@@ -11,7 +11,7 @@ import numericalMethods.RealPolynomial;
 
 public class FailBisection {
 	public static void main(String[] args) {
-		part3();
+		part2();
 	}
 	
 	public static void part1() {
